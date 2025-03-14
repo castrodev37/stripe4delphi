@@ -31,6 +31,7 @@ type
     function Email(AValue: string): ICustomer;
     function Id: string;
     function CreateCustomer: ICustomer;
+    function RetrieveCustomer(AId: string): TStripeCustomerEntity;
   public
     class function New(AHttpClient: IStripeHttpClient): ICustomer;
   end;
@@ -114,6 +115,21 @@ end;
 class function TCustomer.New(AHttpClient: IStripeHttpClient): ICustomer;
 begin
   Result := Self.Create(AHttpClient);
+end;
+
+function TCustomer.RetrieveCustomer(AId: string): TStripeCustomerEntity;
+var
+  LCustomerURL, LContent: string;
+  LJSON: TJSONObject;
+begin
+  if AId.IsEmpty then
+    raise Exception.Create('Customer ID is required');
+
+  LCustomerURL := Format('%s/%s/%s', [cBASE_URL, cCUSTOMERS_RESOURCE, AId]);
+
+  LContent := FHttpClient.Get(LCustomerURL).Content;
+  LJSON := TJSONObject.ParseJSONValue(LContent) as TJSONObject;
+  Result := TStripeCustomerEntity.New(LJSON);
 end;
 
 function TCustomer.ValidateFields: Boolean;

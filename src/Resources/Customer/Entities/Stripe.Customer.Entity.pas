@@ -13,7 +13,7 @@ type
     FNextInvoiceSequence: Integer;
     FTaxExempt: string;
     FName: string;
-    FInvoiceSettings: TStripeCustomerInvoiceSettingsEntity;
+//    FInvoiceSettings: TStripeCustomerInvoiceSettingsEntity;
     FEmail: string;
     FPreferredLocales: TArray<string>;
     FDelinquent: Boolean;
@@ -32,7 +32,7 @@ type
     FAddress: string;
     FShipping: string;
     FCurrency: string;
-    FStripeCustomerInvoiceSettingsEntity: TStripeCustomerInvoiceSettingsEntity;
+//    FStripeCustomerInvoiceSettingsEntity: TStripeCustomerInvoiceSettingsEntity;
 
     constructor Create(AJson: TJSONObject);
    public
@@ -50,7 +50,7 @@ type
     property Discount: string read FDiscount;
     property Email: string read FEmail;
     property InvoicePrefix: string read FInvoicePrefix;
-    property InvoiceSettings: TStripeCustomerInvoiceSettingsEntity read FInvoiceSettings;
+//    property InvoiceSettings: TStripeCustomerInvoiceSettingsEntity read FInvoiceSettings; COMMENT TEMPORÁRIO
     property Livemode: Boolean read FLivemode;
     property Metadata: TJSONObject read FMetadata;
     property Name: string read FName;
@@ -99,12 +99,12 @@ begin
     for I := 0 to LLocales.Count - 1 do
       FPreferredLocales[I] := LLocales.Items[I].Value;
   end;
-  FInvoiceSettings := TStripeCustomerInvoiceSettingsEntity.Create(AJson.GetValue<TJSONObject>('invoice_settings'));
+//  FInvoiceSettings := TStripeCustomerInvoiceSettingsEntity.Create(AJson.GetValue<TJSONObject>('invoice_settings'));
 end;
 
 destructor TStripeCustomerEntity.Destroy;
 begin
-  FInvoiceSettings.Free;
+//  FInvoiceSettings.Free;
   inherited;
 end;
 

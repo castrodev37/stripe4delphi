@@ -24,7 +24,7 @@ type
     class function New(AApiKey: string): IStripeHttpClient;
 
     function Post(AUrl: string; ABody: TStrings; AContentType: string = 'application/x-www-form-urlencoded'): IStripeHttpClient;
-    function Get: IStripeHttpClient;
+    function Get(AUrl: string; AContentType: string = 'application/x-www-form-urlencoded'): IStripeHttpClient;
     function Content: string;
   end;
 
@@ -57,8 +57,24 @@ begin
   inherited;
 end;
 
-function TStripeHttpClient.Get: IStripeHttpClient;
+function TStripeHttpClient.Get(AUrl: string; AContentType: string = 'application/x-www-form-urlencoded'): IStripeHttpClient;
+var
+  LResponse: IHTTPResponse;
 begin
+  Result := Self;
+  try
+    FHttpClient.ContentType := AContentType;
+
+    LResponse := FHttpClient.Get(AUrl);
+
+    if not (LResponse.StatusCode = cSTATUS_OK) then
+      raise Exception.CreateFmt('%s - Status: %d', [LResponse.ContentAsString, LResponse.StatusCode]);
+
+    FContent := LResponse.ContentAsString;
+  except
+    on E: Exception do
+      raise Exception.CreateFmt('Failed on GET Customer request: %s', [E.Message]);
+  end;
 end;
 
 class function TStripeHttpClient.New(AApiKey: string): IStripeHttpClient;
@@ -70,8 +86,8 @@ function TStripeHttpClient.Post(AUrl: string; ABody: TStrings; AContentType: str
 var
   LResponse: IHTTPResponse;
 begin
+  Result := Self;
   try
-    Result := Self;
     FHttpClient.ContentType := AContentType;
 
     LResponse := FHttpClient.Post(AUrl, ABody, nil, TEncoding.UTF8);
@@ -82,7 +98,7 @@ begin
     FContent := LResponse.ContentAsString;
   except
     on E: Exception do
-      raise Exception.CreateFmt('Erro na requisição POST: %s', [E.Message]);
+      raise Exception.CreateFmt('Failed on POST request: %s', [E.Message]);
   end;
 end;
 

@@ -29,9 +29,9 @@ type
   protected
     function Name(AValue: string): ICustomer;
     function Email(AValue: string): ICustomer;
-    function Id: string;
     function CreateCustomer: ICustomer;
-    function RetrieveCustomer(AId: string): TStripeCustomerEntity;
+    function RetrieveCustomer(AId: string): ICustomer;
+    function This: TStripeCustomerEntity;
   public
     class function New(AHttpClient: IStripeHttpClient): ICustomer;
   end;
@@ -55,7 +55,7 @@ var
   LJSON: TJSONObject;
 begin
   if not ValidateFields then
-    raise Exception.Create('Preencha os dados do cliente');
+    raise Exception.Create('Customer params is required');
 
   Result := Self;
   LParams := TStringList.Create;
@@ -77,18 +77,18 @@ begin
   end;
 end;
 
+function TCustomer.This: TStripeCustomerEntity;
+begin
+  if not Assigned(FCustomerEntity) then
+    Exit(nil);
+  Result := FCustomerEntity;
+end;
+
 function TCustomer.Email(AValue: string): ICustomer;
 begin
   Result := Self;
   if IsValid(AValue, 'E-mail') and IsValidEmail(AValue) then
     FEmail := AValue;
-end;
-
-function TCustomer.Id: string;
-begin
-  if not Assigned(FCustomerEntity) then
-    Exit('');
-  Result := FCustomerEntity.Id;
 end;
 
 function TCustomer.IsValid(AFieldText, AFieldName: string): Boolean;
@@ -117,11 +117,12 @@ begin
   Result := Self.Create(AHttpClient);
 end;
 
-function TCustomer.RetrieveCustomer(AId: string): TStripeCustomerEntity;
+function TCustomer.RetrieveCustomer(AId: string): ICustomer;
 var
   LCustomerURL, LContent: string;
   LJSON: TJSONObject;
 begin
+  Result := Self;
   if AId.IsEmpty then
     raise Exception.Create('Customer ID is required');
 
@@ -129,7 +130,7 @@ begin
 
   LContent := FHttpClient.Get(LCustomerURL).Content;
   LJSON := TJSONObject.ParseJSONValue(LContent) as TJSONObject;
-  Result := TStripeCustomerEntity.New(LJSON);
+  FCustomerEntity := TStripeCustomerEntity.New(LJSON);
 end;
 
 function TCustomer.ValidateFields: Boolean;

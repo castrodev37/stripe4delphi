@@ -22,7 +22,6 @@ type
     FCustomerCreation: string;
     FConsentCollection: Variant;
     FClientReferenceId: Variant;
-    FShippingAddressCollection: Variant;
     FSetupIntent: Variant;
     FCustomer: Variant;
     FCustomFields: TObjectList<TObject>;
@@ -63,6 +62,7 @@ type
     FShippingCost: Variant;
     FCurrency: string;
     FAmountTotal: Integer;
+    FShippingAddressCollection: Variant;
 
     constructor Create(AJson: TJSONObject);
 

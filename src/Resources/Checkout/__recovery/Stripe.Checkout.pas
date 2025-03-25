@@ -70,7 +70,7 @@ begin
         Inc(LCount);
       end;
 
-      if FSessionCreateParams.ShippingAddressCollection.Count > 0 then
+      if Length(FSessionCreateParams.ShippingAddressCollection) > 0 then
       begin
         LCount := 0;
         for LCountry in FSessionCreateParams.ShippingAddressCollection do

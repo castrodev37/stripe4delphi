@@ -35,8 +35,7 @@ implementation
 function TStripe.Checkout: ICheckout;
 begin
   if not Assigned(FCheckout) then
-    FCheckout := TCheckout.New(TStripeCheckoutSessionCreateParams.Create,
-      FHttpClient);
+    FCheckout := TCheckout.New(FHttpClient);
   Result := FCheckout;
 end;
 
@@ -54,7 +53,6 @@ end;
 
 destructor TStripe.Destroy;
 begin
-
   inherited;
 end;
 

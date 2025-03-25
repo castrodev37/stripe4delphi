@@ -62,11 +62,11 @@ begin
         .CancelUrl('https://example.com/cancel')
         .Mode('payment')
         .AddSessionLineItem
-          .Price('price_1R2uGWBL9pXT2oEjGk5BLSTA')
+          .Price('price_xxxxxxxxxxxxxxxxxxxxxxxx')
           .Quantity(1)
         .&End
         .AddSessionLineItem
-          .Price('price_1R6040BL9pXT2oEjK0GNov3n')
+          .Price('price_yyyyyyyyyyyyyyyyyyyyyyyy')
           .Quantity(2)
         .&End
       .&End

@@ -65,6 +65,10 @@ begin
           .Price('price_1R2uGWBL9pXT2oEjGk5BLSTA')
           .Quantity(1)
         .&End
+        .AddSessionLineItem
+          .Price('price_1R6040BL9pXT2oEjK0GNov3n')
+          .Quantity(2)
+        .&End
       .&End
       .CreateSession;
 
